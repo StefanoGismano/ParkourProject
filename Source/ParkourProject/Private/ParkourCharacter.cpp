@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemComponent.h"
 #include "ParkourProject.h"
 
 // Sets default values
@@ -32,6 +33,8 @@ AParkourCharacter::AParkourCharacter()
 	// Configure character movement
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 	GetCharacterMovement()->AirControl = 0.5f;
+	
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 
 }
 
@@ -39,6 +42,11 @@ AParkourCharacter::AParkourCharacter()
 void AParkourCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
 
 }
 
@@ -47,6 +55,11 @@ void AParkourCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+UAbilitySystemComponent* AParkourCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void AParkourCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

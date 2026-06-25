@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "ParkourCharacter.generated.h"
 
 class UInputComponent;
@@ -10,7 +11,7 @@ class UInputAction;
 struct FInputActionValue;
 
 UCLASS()
-class PARKOURPROJECT_API AParkourCharacter : public ACharacter
+class PARKOURPROJECT_API AParkourCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -39,6 +40,11 @@ protected:
 public:
 	// Sets default values for this character's properties
 	AParkourCharacter();
+	
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 protected:
 	// Called when the game starts or when spawned
