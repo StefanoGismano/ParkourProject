@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Attributes/SpeedAttributeSet.h"
 #include "AbilitySystemComponent.h"
 #include "ParkourProject.h"
 
@@ -34,7 +35,11 @@ AParkourCharacter::AParkourCharacter()
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 	GetCharacterMovement()->AirControl = 0.5f;
 	
+	//Create Ability System Component
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	
+	//Create Speed Attribute
+	SpeedAttributeSet = CreateDefaultSubobject<USpeedAttributeSet>(TEXT("SpeedAttributeSet"));
 
 }
 
@@ -43,11 +48,21 @@ void AParkourCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (SpeedAttributeSet)
+	{
+		SpeedAttributeSet->OnSpeedChanged.AddDynamic(this, &AParkourCharacter::HandleSpeedChanged);
+	}
 	if (AbilitySystemComponent)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		AbilitySystemComponent->SetNumericAttributeBase(USpeedAttributeSet::GetSpeedAttribute(), BaseSpeed);
+		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
+}
 
+void AParkourCharacter::HandleSpeedChanged(float Magnitude, float NewSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
 }
 
 // Called every frame
@@ -61,6 +76,8 @@ UAbilitySystemComponent* AParkourCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
+
+
 
 void AParkourCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

@@ -5,6 +5,8 @@
 #include "AbilitySystemInterface.h"
 #include "ParkourCharacter.generated.h"
 
+class UAbilitySystemComponent;
+class USpeedAttributeSet;
 class UInputComponent;
 class UCameraComponent;
 class UInputAction;
@@ -45,6 +47,15 @@ public:
 	 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	
+	UPROPERTY()
+	TObjectPtr<USpeedAttributeSet> SpeedAttributeSet;
+	 
+	UPROPERTY(EditAnywhere)
+	float BaseSpeed = 600.0f;
+	 
+	UFUNCTION()
+	void HandleSpeedChanged(float Magnitude, float NewHealth);
 
 protected:
 	// Called when the game starts or when spawned
