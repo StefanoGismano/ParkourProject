@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Attributes/SpeedAttributeSet.h"
 #include "ParkourCharacter.generated.h"
 
 class UAbilitySystemComponent;
@@ -53,9 +54,8 @@ public:
 	 
 	UPROPERTY(EditAnywhere)
 	float BaseSpeed = 600.0f;
-	 
-	UFUNCTION()
-	void HandleSpeedChanged(float Magnitude, float NewHealth);
+	
+	void HandleSpeedChanged(const FOnAttributeChangeData& Data);
 
 protected:
 	// Called when the game starts or when spawned

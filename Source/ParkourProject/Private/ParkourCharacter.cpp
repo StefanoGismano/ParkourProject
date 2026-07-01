@@ -1,5 +1,4 @@
 #include "ParkourCharacter.h"
-#include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
@@ -48,21 +47,19 @@ void AParkourCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (SpeedAttributeSet)
-	{
-		SpeedAttributeSet->OnSpeedChanged.AddDynamic(this, &AParkourCharacter::HandleSpeedChanged);
-	}
 	if (AbilitySystemComponent)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AbilitySystemComponent->SetNumericAttributeBase(USpeedAttributeSet::GetSpeedAttribute(), BaseSpeed);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		USpeedAttributeSet::GetSpeedAttribute()).AddUObject(this, &AParkourCharacter::HandleSpeedChanged);
 		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
 }
 
-void AParkourCharacter::HandleSpeedChanged(float Magnitude, float NewSpeed)
+void AParkourCharacter::HandleSpeedChanged(const FOnAttributeChangeData& Data)
 {
-	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
 
 // Called every frame
