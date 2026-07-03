@@ -20,6 +20,7 @@ public class ParkourProject : ModuleRules
 			"UMG",
 			"Slate",
 			"GameplayAbilities",
+			"GameplayTags"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

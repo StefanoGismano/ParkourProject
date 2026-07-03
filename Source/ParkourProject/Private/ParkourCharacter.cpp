@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Attributes/SpeedAttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayTagContainer.h"
 #include "ParkourProject.h"
 
 // Sets default values
@@ -55,11 +56,13 @@ void AParkourCharacter::BeginPlay()
 		USpeedAttributeSet::GetSpeedAttribute()).AddUObject(this, &AParkourCharacter::HandleSpeedChanged);
 		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	}
+	SlidingTag = FGameplayTag::RequestGameplayTag(FName("Movement.Sliding"));
 }
 
 void AParkourCharacter::HandleSpeedChanged(const FOnAttributeChangeData& Data)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
+	GetCharacterMovement()->MaxWalkSpeedCrouched = Data.NewValue;
 }
 
 // Called every frame
@@ -105,6 +108,10 @@ void AParkourCharacter::MoveInput(const FInputActionValue& Value)
 {
 	// get the Vector2D move axis
 	FVector2D MovementVector = Value.Get<FVector2D>();
+	
+	if (GetAbilitySystemComponent()->HasMatchingGameplayTag(SlidingTag)) {
+		MovementVector.X = 0;
+	}
 
 	// pass the axis values to the move input
 	DoMove(MovementVector.X, MovementVector.Y);

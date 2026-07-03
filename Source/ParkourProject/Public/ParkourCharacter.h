@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "Attributes/SpeedAttributeSet.h"
+#include "GameplayTagContainer.h"
 #include "ParkourCharacter.generated.h"
 
 class UAbilitySystemComponent;
@@ -12,6 +13,7 @@ class UInputComponent;
 class UCameraComponent;
 class UInputAction;
 struct FInputActionValue;
+struct FGameplayTag;
 
 UCLASS()
 class PARKOURPROJECT_API AParkourCharacter : public ACharacter, public IAbilitySystemInterface
@@ -39,6 +41,8 @@ protected:
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputAction* MouseLookAction;
+	
+	FGameplayTag SlidingTag;
 
 public:
 	// Sets default values for this character's properties
