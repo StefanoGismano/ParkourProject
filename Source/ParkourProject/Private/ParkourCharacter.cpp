@@ -108,10 +108,6 @@ void AParkourCharacter::MoveInput(const FInputActionValue& Value)
 {
 	// get the Vector2D move axis
 	FVector2D MovementVector = Value.Get<FVector2D>();
-	
-	if (GetAbilitySystemComponent()->HasMatchingGameplayTag(SlidingTag)) {
-		MovementVector.X = 0;
-	}
 
 	// pass the axis values to the move input
 	DoMove(MovementVector.X, MovementVector.Y);
@@ -140,7 +136,7 @@ void AParkourCharacter::DoAim(float Yaw, float Pitch)
 
 void AParkourCharacter::DoMove(float Right, float Forward)
 {
-	if (GetController())
+	if (GetController() && !GetAbilitySystemComponent()->HasMatchingGameplayTag(SlidingTag))
 	{
 		// pass the move inputs
 		AddMovementInput(GetActorRightVector(), Right);
