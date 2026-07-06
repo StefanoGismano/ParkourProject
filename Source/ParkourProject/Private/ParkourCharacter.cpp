@@ -136,7 +136,7 @@ void AParkourCharacter::DoAim(float Yaw, float Pitch)
 
 void AParkourCharacter::DoMove(float Right, float Forward)
 {
-	if (GetController() && !GetAbilitySystemComponent()->HasMatchingGameplayTag(SlidingTag))
+	if (GetController() && (!GetAbilitySystemComponent()->HasMatchingGameplayTag(SlidingTag) || GetCharacterMovement()->IsFalling()))
 	{
 		// pass the move inputs
 		AddMovementInput(GetActorRightVector(), Right);
