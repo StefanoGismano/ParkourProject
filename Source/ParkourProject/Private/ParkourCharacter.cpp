@@ -33,7 +33,7 @@ AParkourCharacter::AParkourCharacter()
 
 	// Configure character movement
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
-	GetCharacterMovement()->AirControl = 0.5f;
+	GetCharacterMovement()->AirControl = 1.f;
 	
 	//Create Ability System Component
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
@@ -69,6 +69,15 @@ void AParkourCharacter::HandleSpeedChanged(const FOnAttributeChangeData& Data)
 void AParkourCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	if (GetCharacterMovement()->Velocity.Z < 0.f)
+	{
+		GetCharacterMovement()->GravityScale = 1.5f;
+	}
+	else
+	{
+		GetCharacterMovement()->GravityScale = 1.0f;
+	}
 
 }
 
